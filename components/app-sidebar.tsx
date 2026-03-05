@@ -1,6 +1,11 @@
 "use strict";
 
 import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
@@ -10,22 +15,33 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { LayoutDashboard, Tag } from "lucide-react"
+import { ChevronRight, LayoutDashboard, Tag } from "lucide-react"
 import Link from "next/link"
 import createLogger from "@/lib/logger"
 
 const logger = createLogger("AppSidebar")
 
-interface Category {
-  id: string | number
-  name: string
+export type NavItem = {
+  title: string
+  href?: string
+  children?: NavItem[]
 }
 
-async function getCategories(): Promise<Category[]> {
+interface Group {
+  id: number
+  name: string
+  children: Group[]
+  sources: unknown[]
+}
+
+async function getGroups(): Promise<Group[]> {
   try {
-    const res = await fetch(`${process.env.API_BASE_URL}/api/categories`, {
+    const res = await fetch(`${process.env.API_BASE_URL}/api/reporting/streams/hierarchy`, {
       next: { revalidate: 60 },
     })
     if (!res.ok) return []
@@ -35,9 +51,89 @@ async function getCategories(): Promise<Category[]> {
   }
 }
 
+function groupToNavItem(group: Group): NavItem {
+  return {
+    title: group.name,
+    href: `/category/${group.id}`,
+    children: group.children.map(groupToNavItem),
+  }
+}
+
+function NavItemNode({ item }: { item: NavItem }) {
+  if (item.children?.length) {
+    return (
+      <Collapsible asChild defaultOpen={false} className="group/collapsible">
+        <SidebarMenuItem>
+          <CollapsibleTrigger asChild>
+            <SidebarMenuButton tooltip={item.title}>
+              <Tag />
+              <span>{item.title}</span>
+              <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+            </SidebarMenuButton>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <SidebarMenuSub>
+              {item.children.map((child) => (
+                <NavSubItemNode key={child.title} item={child} />
+              ))}
+            </SidebarMenuSub>
+          </CollapsibleContent>
+        </SidebarMenuItem>
+      </Collapsible>
+    )
+  }
+
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton asChild tooltip={item.title}>
+        <Link href={item.href ?? "#"}>
+          <Tag />
+          <span>{item.title}</span>
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  )
+}
+
+function NavSubItemNode({ item }: { item: NavItem }) {
+  if (item.children?.length) {
+    return (
+      <Collapsible asChild defaultOpen={false} className="group/collapsible">
+        <SidebarMenuSubItem>
+          <CollapsibleTrigger asChild>
+            <SidebarMenuSubButton>
+              <span>{item.title}</span>
+              <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+            </SidebarMenuSubButton>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <SidebarMenuSub>
+              {item.children.map((child) => (
+                <NavSubItemNode key={child.title} item={child} />
+              ))}
+            </SidebarMenuSub>
+          </CollapsibleContent>
+        </SidebarMenuSubItem>
+      </Collapsible>
+    )
+  }
+
+  return (
+    <SidebarMenuSubItem>
+      <SidebarMenuSubButton asChild>
+        <Link href={item.href ?? "#"}>
+          <span>{item.title}</span>
+        </Link>
+      </SidebarMenuSubButton>
+    </SidebarMenuSubItem>
+  )
+}
+
 export async function AppSidebar() {
-  const categories = await getCategories()
-  logger.info(`Fetched ${categories.length} categories`)
+  const groups = await getGroups()
+  logger.info(`Fetched ${groups.length} groups`)
+
+  const navItems: NavItem[] = groups.map(groupToNavItem)
 
   return (
     <Sidebar collapsible="icon">
@@ -51,18 +147,11 @@ export async function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Categories</SidebarGroupLabel>
+          <SidebarGroupLabel>Subjects</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {categories.map((category) => (
-                <SidebarMenuItem key={category.id}>
-                  <SidebarMenuButton asChild tooltip={category.name}>
-                    <Link href={`/category/${category.id}`}>
-                      <Tag />
-                      <span>{category.name}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+              {navItems.map((item) => (
+                <NavItemNode key={item.title} item={item} />
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
