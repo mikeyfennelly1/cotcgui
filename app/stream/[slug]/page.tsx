@@ -17,30 +17,28 @@ interface Stream {
 
 const logger = createLogger("StreamPage")
 
-async function getStream(name: string): Promise<Stream | null> {
-  try {
-    const res = await fetch(
-      `${process.env.API_BASE_URL}/api/reporting/streams?name=${encodeURIComponent(name)}`,
-      { next: { revalidate: 60 } }
-    )
-    if (!res.ok) return null
-    return res.json()
-  } catch {
-    return null
+export async function getStream(name: string): Promise<Stream | null> {
+  const streamEndpoint = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/group/events/${encodeURIComponent(name)}`;
+  logger.debug(`fetching SSE stream from: ${streamEndpoint}`)
+
+  const res = await fetch(
+      streamEndpoint,
+      {next: {revalidate: 60}}
+  )
+  if (!res.ok) {
+    logger.error(`response was not ok: ${res.json()}`)
+    return null;
   }
+  return res.json()
 }
 
-export default async function StreamPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>
-}) {
+export default async function StreamPage({params,}: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const name = decodeURIComponent(slug)
   const stream: Stream | null = await getStream(name)
 
   if (!stream) {
-    logger.debug(`no stream found for name=${name}`)
+    logger.debug(`failed to retrieve stream for name=${name}`)
     notFound()
   }
 
@@ -60,9 +58,7 @@ export default async function StreamPage({
         </div>
       </div>
 
-      {stream.producers.length > 0 ? (
-        <StreamView producers={stream.producers} streamName={stream.name} />
-      ) : (
+      {stream.producers.length > 0 ? (<StreamView producers={stream.producers} streamName={stream.name} />) : (
         <div className="flex h-40 items-center justify-center rounded-lg border-2 border-dashed bg-muted/50">
           <p className="text-muted-foreground italic">No producers for {stream.name}</p>
         </div>

@@ -12,6 +12,25 @@ interface Producer {
   producerName: string
 }
 
+/** Matches TimeSeriesMessageDTO from the backend */
+interface TimeSeriesMessage {
+  producer_id: string
+  producer_name: string
+  read_time: number  // epoch seconds
+  values: Record<string, number>
+}
+
+function messageToRecords(msg: TimeSeriesMessage): TimeSeriesRecord[] {
+  const readTime = new Date(msg.read_time * 1000).toISOString()
+  return Object.entries(msg.values).map(([key, value]) => ({
+    id: `${msg.producer_id}-${key}-${msg.read_time}`,
+    key,
+    value,
+    producerName: msg.producer_name,
+    readTime,
+  }))
+}
+
 interface StreamViewProps {
   producers: Producer[]
   streamName: string
@@ -19,9 +38,7 @@ interface StreamViewProps {
 
 export function StreamView({ producers, streamName }: StreamViewProps) {
   const [records, setRecords] = useState<TimeSeriesRecord[]>([])
-  const [selected, setSelected] = useState<Set<string>>(
-    new Set(producers.map((p) => p.producerName))
-  )
+  const [selected, setSelected] = useState<Set<string>>(new Set(producers.map((p) => p.producerName)))
 
   useEffect(() => {
     const url = `/api/group/events/${streamName}`
@@ -36,9 +53,10 @@ export function StreamView({ producers, streamName }: StreamViewProps) {
     es.addEventListener("history", (event) => {
       console.log(`SSE history event for stream id=${streamName}:`, event.data)
       try {
-        const batch: TimeSeriesRecord[] = JSON.parse(event.data)
-        logger.debug(`SSE history: ${batch.length} records`)
-        setRecords(batch)
+        const batch: TimeSeriesMessage[] = JSON.parse(event.data)
+        const records = batch.flatMap(messageToRecords)
+        logger.debug(`SSE history: ${batch.length} messages → ${records.length} records`)
+        setRecords(records)
       } catch (err) {
         logger.warn(`Failed to parse SSE history event: ${err}`)
       }
@@ -47,9 +65,10 @@ export function StreamView({ producers, streamName }: StreamViewProps) {
     es.addEventListener("update", (event) => {
       console.log(`SSE update event for stream id=${streamName}:`, event.data)
       try {
-        const record: TimeSeriesRecord = JSON.parse(event.data)
-        logger.debug(`SSE update: key=${record.key} producer=${record.producerName}`)
-        setRecords((prev) => [...prev, record])
+        const msg: TimeSeriesMessage = JSON.parse(event.data)
+        const records = messageToRecords(msg)
+        logger.debug(`SSE update: producer=${msg.producer_name} keys=${Object.keys(msg.values).join(",")}`)
+        setRecords((prev) => [...prev, ...records])
       } catch (err) {
         logger.warn(`Failed to parse SSE update event: ${err}`)
       }
@@ -73,7 +92,7 @@ export function StreamView({ producers, streamName }: StreamViewProps) {
     })
   }
 
-  const filtered = records.filter((r) => selected.has(r.producerName))
+  const filtered: TimeSeriesRecord[] = records.filter((r) => selected.has(r.producerName))
 
   return (
     <div className="flex gap-4 items-start">

@@ -40,8 +40,10 @@ interface Stream {
 }
 
 async function getStreams(): Promise<Stream[]> {
+  const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/group`
+  logger.info(`fetching from ${url}`)
   try {
-    const res = await fetch(`${process.env.API_BASE_URL}/api/group`, {
+    const res = await fetch(url, {
       next: { revalidate: 60 },
     })
     if (!res.ok) return []

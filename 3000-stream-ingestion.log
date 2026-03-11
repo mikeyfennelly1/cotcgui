@@ -1,0 +1,26 @@
+
+> ise--y2--b3--project--web-gui@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.4 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.54.152.120:3000
+- Environments: .env.local
+
+✓ Starting...
+✓ Ready in 791ms
+2026-03-11 13:47:40,825 INFO  [AppSidebar] - fetching from http://localhost:3000/api/group
+2026-03-11 13:47:40,866 DEBUG [StreamPage] - fetching SSE stream from: http://localhost:3000/api/group/events/test.child
+2026-03-11 13:47:41,104 INFO  [AppSidebar] - Fetched 1 groups
+ GET /stream/test.child 200 in 18.1s (compile: 970ms, render: 17.1s)
+2026-03-11 13:47:57,905 INFO  [AppSidebar] - fetching from http://localhost:3000/api/group
+2026-03-11 13:47:57,918 INFO  [AppSidebar] - Fetched 1 groups
+ GET /test-stream-page 200 in 246ms (compile: 40ms, render: 205ms)
+2026-03-11 13:47:59,613 INFO  [AppSidebar] - fetching from http://localhost:3000/api/group
+2026-03-11 13:47:59,626 INFO  [AppSidebar] - Fetched 1 groups
+ GET /placeholder-user.jpg 404 in 144ms (compile: 56ms, render: 88ms)
+2026-03-11 13:48:11,241 DEBUG [StreamPage] - failed to retrieve stream for name=test.child
+2026-03-11 13:48:23,338 DEBUG [StreamPage] - fetching SSE stream from: http://localhost:3000/api/group/events/test.child
+2026-03-11 13:48:53,389 DEBUG [StreamPage] - failed to retrieve stream for name=test.child
+ GET /stream/test.child 200 in 30.2s (compile: 92ms, render: 30.1s)
+[?25h
