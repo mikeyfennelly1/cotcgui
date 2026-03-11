@@ -37,7 +37,7 @@ export default async function StreamPage({
 }) {
   const { slug } = await params
   const name = decodeURIComponent(slug)
-  const stream = await getStream(name)
+  const stream: Stream | null = await getStream(name)
 
   if (!stream) {
     logger.debug(`no stream found for name=${name}`)
@@ -61,7 +61,7 @@ export default async function StreamPage({
       </div>
 
       {stream.producers.length > 0 ? (
-        <StreamView producers={stream.producers} streamId={stream.uuid} />
+        <StreamView producers={stream.producers} streamName={stream.name} />
       ) : (
         <div className="flex h-40 items-center justify-center rounded-lg border-2 border-dashed bg-muted/50">
           <p className="text-muted-foreground italic">No producers for {stream.name}</p>

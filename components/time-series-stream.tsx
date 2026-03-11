@@ -1,25 +1,20 @@
 "use client"
 
-import {useEffect} from "react"
+import {useEffect, useState} from "react"
 import {TimeSeriesChart, type TimeSeriesRecord} from "@/components/time-series-chart"
-import {createLogger} from "@/lib/logger"
-
-const logger = createLogger("TimeSeriesStream")
+import {StreamHandler, type SetRecords} from "@/components/stream-handler"
 
 export function TimeSeriesStream({ streamId }: { streamId: string | number }) {
-
+  const [records, setRecords] = useState<TimeSeriesRecord[]>([])
 
   useEffect(() => {
-
+    const handler = new StreamHandler(String(streamId), { setRecords })
     return () => {
-      es.close()
-      logger.info(`SSE connection closed for stream id=${streamId}`)
+      handler.close()
     }
   }, [streamId])
 
   return <TimeSeriesChart records={records} />
 }
 
-export interface SetRecords {
-  setRecords(records: TimeSeriesRecord[]): void;
-}
+export type {SetRecords};

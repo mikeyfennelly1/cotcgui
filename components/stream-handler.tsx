@@ -1,8 +1,11 @@
 import type {TimeSeriesRecord} from "@/components/time-series-chart";
-import {createLogger, Logger} from "@/lib/logger";
-import {SetRecords} from "@/components/time-series-stream";
+import createLogger, {Logger} from "@/lib/logger";
 
-class StreamHandler {
+export interface SetRecords {
+    setRecords(records: TimeSeriesRecord[]): void;
+}
+
+export class StreamHandler {
     private readonly streamUrl: string;
     private readonly streamId: string;
     private es: EventSource;
@@ -11,16 +14,21 @@ class StreamHandler {
     private logger: Logger;
 
     constructor(
-        streamId: string,
+        streamName: string,
         dispatcher: SetRecords
     ) {
-        this.streamId = streamId;
-        this.streamUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/reporting/streams/${streamId}`;
+        this.streamId = streamName;
+        this.streamUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/reporting/streams/${streamName}`;
+        this.logger = createLogger("TimeSeriesStream");
+        this.currentRecordSet = [];
         this.es = new EventSource(this.streamUrl);
         this.dispatcher = dispatcher;
         this.init();
-        this.logger = createLogger("TimeSeriesStream");
-        this.currentRecordSet = this.newMessageEventHandler();
+    }
+
+    close(): void {
+        this.es.close();
+        this.logger.info(`SSE connection closed for stream id=${this.streamId}`);
     }
 
     private init(): void {
@@ -32,7 +40,7 @@ class StreamHandler {
 
     private initErrCallback(): void {
         this.es.onerror = () => {
-            logger.error(`SSE connection error for stream id=${this.streamId}`);
+            this.logger.error(`SSE connection error for stream id=${this.streamId}`);
         }
     }
 
@@ -51,7 +59,7 @@ class StreamHandler {
     }
 
     private initHistoryHandler(): void {
-        this.es.addEventListener("history", this.newMessageEventHandler)
+        this.es.addEventListener("history", this.newMessageEventHandler())
     }
 
     private newMessageEventHandler() {

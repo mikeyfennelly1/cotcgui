@@ -14,27 +14,27 @@ interface Producer {
 
 interface StreamViewProps {
   producers: Producer[]
-  streamId: string
+  streamName: string
 }
 
-export function StreamView({ producers, streamId }: StreamViewProps) {
+export function StreamView({ producers, streamName }: StreamViewProps) {
   const [records, setRecords] = useState<TimeSeriesRecord[]>([])
   const [selected, setSelected] = useState<Set<string>>(
     new Set(producers.map((p) => p.producerName))
   )
 
   useEffect(() => {
-    const url = `/api/reporting/streams/${streamId}`
+    const url = `/api/group/events/${streamName}`
     const es = new EventSource(url)
 
     logger.info(`SSE connection opened to ${url}`)
 
     es.onmessage = (event) => {
-      console.log(`SSE message for stream id=${streamId}:`, event.data)
+      console.log(`SSE message for stream id=${streamName}:`, event.data)
     }
 
     es.addEventListener("history", (event) => {
-      console.log(`SSE history event for stream id=${streamId}:`, event.data)
+      console.log(`SSE history event for stream id=${streamName}:`, event.data)
       try {
         const batch: TimeSeriesRecord[] = JSON.parse(event.data)
         logger.debug(`SSE history: ${batch.length} records`)
@@ -45,7 +45,7 @@ export function StreamView({ producers, streamId }: StreamViewProps) {
     })
 
     es.addEventListener("update", (event) => {
-      console.log(`SSE update event for stream id=${streamId}:`, event.data)
+      console.log(`SSE update event for stream id=${streamName}:`, event.data)
       try {
         const record: TimeSeriesRecord = JSON.parse(event.data)
         logger.debug(`SSE update: key=${record.key} producer=${record.producerName}`)
@@ -56,14 +56,14 @@ export function StreamView({ producers, streamId }: StreamViewProps) {
     })
 
     es.onerror = () => {
-      logger.error(`SSE connection error for stream id=${streamId}`)
+      logger.error(`SSE connection error for stream id=${streamName}`)
     }
 
     return () => {
       es.close()
-      logger.info(`SSE connection closed for stream id=${streamId}`)
+      logger.info(`SSE connection closed for stream id=${streamName}`)
     }
-  }, [streamId])
+  }, [streamName])
 
   function toggle(name: string) {
     setSelected((prev) => {

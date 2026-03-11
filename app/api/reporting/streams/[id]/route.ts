@@ -1,12 +1,12 @@
-import { NextRequest } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-) {
-  const { id } = await params
+): Promise<NextResponse | Response> {
+  const { id: groupName } = await params
   const upstream = await fetch(
-    `${process.env.API_BASE_URL}/api/reporting/streams/${id}`,
+    `${process.env.SUBSCRIBER_URL}/api/group/events/${groupName}`,
     {
       headers: { Accept: "text/event-stream" },
       // @ts-expect-error — Node fetch needs this to disable response buffering

@@ -23,7 +23,6 @@ import {
 import { ChevronRight, LayoutDashboard, Tag } from "lucide-react"
 import Link from "next/link"
 import createLogger from "@/lib/logger"
-import {UUID} from "node:crypto";
 
 const logger = createLogger("AppSidebar")
 
@@ -42,7 +41,7 @@ interface Stream {
 
 async function getStreams(): Promise<Stream[]> {
   try {
-    const res = await fetch(`${process.env.API_BASE_URL}/api/reporting/streams`, {
+    const res = await fetch(`${process.env.API_BASE_URL}/api/group`, {
       next: { revalidate: 60 },
     })
     if (!res.ok) return []

@@ -14,7 +14,7 @@ export interface Logger {
   error: (message: unknown) => void
 }
 
-export function createLogger(name: string): Logger {
+export default function createLogger(name: string): Logger {
   return {
     debug: (message: unknown) => console.debug(formatMessage("DEBUG", name, message)),
     info:  (message: unknown) => console.info(formatMessage("INFO",  name, message)),
