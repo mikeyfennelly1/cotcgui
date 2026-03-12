@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeAll } from "vitest"
 import { NextRequest } from "next/server"
 import { GET } from "./route"
+import {TimeSeriesMessage} from "@/app/test-stream-page/page";
 
 beforeAll(() => {
   process.env.SUBSCRIBER_URL = "http://localhost:8082"
@@ -8,7 +9,7 @@ beforeAll(() => {
 
 describe("GET /api/group/events/[id]", () => {
   it("proxies SSE stream for group 'test'", async () => {
-    const request = new NextRequest("http://localhost:3000/api/group/events/test")
+    const request = new NextRequest("http://localhost:8082/api/group/events?group=test")
     const params = Promise.resolve({ id: "test" })
 
     const response = await GET(request, { params })
@@ -19,11 +20,13 @@ describe("GET /api/group/events/[id]", () => {
     expect(response.status).toBe(200)
     expect(response.headers.get("Content-Type")).toBe("text/event-stream")
 
-    // Read one chunk from the stream then cancel to avoid hanging
-    const reader = response.body!.getReader()
-    const { value } = await reader.read()
-    const chunk = new TextDecoder().decode(value)
-    console.log("first chunk:", chunk)
-    await reader.cancel()
+    const reader: ReadableStreamDefaultReader<Uint8Array<ArrayBuffer>> = response.body!.getReader()
+    const decoder = new TextDecoder()
+    while (true) {
+      const { value, done } = await reader.read()
+      if (done) break
+      const chunk = decoder.decode(value)
+      if (chunk) console.log("chunk:", chunk)
+    }
   })
 })

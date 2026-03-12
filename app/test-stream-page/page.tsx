@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { TimeSeriesChart, type TimeSeriesRecord } from "@/components/time-series-chart"
 import data from "./data.json"
 
-interface TimeSeriesMessage {
+export interface TimeSeriesMessage {
   producer_id: string
   producer_name: string
   read_time: number
