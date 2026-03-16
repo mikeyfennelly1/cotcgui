@@ -51,12 +51,20 @@ export function TimeSeriesChart({ records }: { records: TimeSeriesRecord[] }) {
         <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
         <XAxis
           dataKey="readTime"
-          tickFormatter={(v) => new Date(v).toLocaleTimeString()}
+          tickFormatter={(v: string) => v.split("T")[1]?.replace("Z", "") ?? v}
           tick={{ fontSize: 12 }}
         />
-        <YAxis tick={{ fontSize: 12 }} />
+        <YAxis
+          tick={{ fontSize: 12 }}
+          tickFormatter={(v: number) => {
+            if (v >= 1_000_000_000) return `${v / 1_000_000_000}B`
+            if (v >= 1_000_000) return `${v / 1_000_000}M`
+            if (v >= 1_000) return `${v / 1_000}K`
+            return String(v)
+          }}
+        />
         <Tooltip
-          labelFormatter={(v) => new Date(v as string).toLocaleString()}
+          labelFormatter={(v) => (v as string).replace("T", " ").replace("Z", " UTC")}
           contentStyle={{
             backgroundColor: "hsl(var(--popover))",
             border: "1px solid hsl(var(--border))",
