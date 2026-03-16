@@ -10,14 +10,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts"
-
-export interface TimeSeriesRecord {
-  id: string
-  key: string
-  value: number
-  producerName: string
-  readTime: string
-}
+import {TimeSeriesRecord} from "@/lib/types/TimeSeriesRecord";
 
 const LINE_COLORS = ["#6366f1", "#f59e0b", "#10b981", "#ef4444", "#3b82f6", "#8b5cf6"]
 
