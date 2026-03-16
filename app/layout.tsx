@@ -3,8 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar } from "@/components/app-sidebar/AppSidebar";
 import { TopBanner } from "@/components/top-banner";
+import React from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,8 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ise--y2--b3--project",
-  description: "Dashboard boilerplate for ise--y2--b3--project",
+  title: "cotc",
+  description: "GUI for context of the code module in college",
 };
 
 export default function RootLayout({
