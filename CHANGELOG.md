@@ -7,5 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- add docker build script and git hooks
+
 ### Changed
 - add createGroup client method and sidebar sheet UI
