@@ -31,4 +31,18 @@ async function getGroupByName(groupName: string): Promise<Group> {
     }
 }
 
-export {getGroups, getGroupByName}
+/**
+ * @throws ServerSideException
+ * @param name
+ */
+async function createGroup(name: string): Promise<void> {
+    const logger: Logger = createLogger("createGroup")
+    const url = `http://localhost:8082/api/group?name=${encodeURIComponent(name)}`
+    const res: Response = await fetch(url, { method: "POST" })
+    if (!res.ok) {
+        logger.warn("received non-200 response")
+        throw new ServerSideException("unable to create group")
+    }
+}
+
+export {getGroups, getGroupByName, createGroup}

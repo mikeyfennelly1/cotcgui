@@ -3,6 +3,7 @@
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -15,6 +16,7 @@ import createLogger from "@/lib/logger"
 import {NavItemNode} from "@/components/app-sidebar/NavItemNode";
 import {Group} from "@/lib/types/Group";
 import {getGroups} from "@/lib/client/group/group";
+import {CreateGroupSheet} from "@/components/app-sidebar/CreateGroupSheet";
 
 const logger = createLogger("AppSidebar")
 
@@ -60,6 +62,9 @@ export async function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter className="p-3">
+        <CreateGroupSheet />
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   )
