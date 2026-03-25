@@ -1,5 +1,5 @@
-import type {TimeSeriesRecord} from "@/components/time-series-chart";
 import createLogger, {Logger} from "@/lib/logger";
+import {TimeSeriesRecord} from "@/lib/types/TimeSeriesRecord";
 
 export interface SetRecords {
     setRecords(records: TimeSeriesRecord[]): void;

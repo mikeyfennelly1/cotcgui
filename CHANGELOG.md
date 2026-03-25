@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Fixed
+- import TimeSeriesRecord from correct path
 - remove redundant router.refresh() after group deletion
 - remove use strict directive, add getGroupByName import, type groups
 
