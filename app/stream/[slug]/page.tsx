@@ -30,7 +30,7 @@ export default async function GroupPage({ params }: { params: Promise<{ slug: st
             <Separator.Root className={"h-px bg-border"}/>
             {GroupStreamView(producerCount, group)}
             <Separator.Root className={"h-px bg-border"}/>
-            {ProducerView(producerCount)}
+            {ProducerView(group)}
         </main>
     )
 }
