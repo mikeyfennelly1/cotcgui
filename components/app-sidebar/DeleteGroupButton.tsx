@@ -27,7 +27,7 @@ export function DeleteGroupButton({ groupName }: { groupName: string }) {
     }
 
     return (
-        <Button variant={"destructive"} className={"ml-auto"} onClick={handleDelete} disabled={loading}>
+        <Button variant={"destructive"} className={"ml-auto cursor-pointer"} onClick={handleDelete} disabled={loading}>
             {loading ? "Deleting..." : "Delete Group"}
         </Button>
     )

@@ -14,4 +14,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - add docker build script and git hooks
 
 ### Changed
+- add cursor pointer to DeleteGroupButton
 - add createGroup client method and sidebar sheet UI
