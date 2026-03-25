@@ -7,6 +7,8 @@ import {producerListToNameSet} from "@/lib/translate/Translators";
 import React from "react";
 import {Separator} from "radix-ui";
 import {DeleteGroupButton} from "@/components/app-sidebar/DeleteGroupButton";
+import {Producer} from "@/lib/types/Producer";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 
 const logger: Logger = createLogger("GroupPage")
 

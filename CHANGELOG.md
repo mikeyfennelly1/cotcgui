@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - add docker build script and git hooks
 
 ### Changed
+- extract EnabledProducersList component and clean up imports
 - revalidate groups cache tag on group creation
 - accept groupName and producers props instead of static data
 - clear home page content
