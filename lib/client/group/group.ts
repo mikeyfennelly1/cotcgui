@@ -4,7 +4,7 @@ import {ServerSideException} from "@/lib/client/exception/ServerSideException";
 import createLogger, {Logger} from "@/lib/logger";
 
 async function getGroups(): Promise<Group[]> {
-    const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/group`
+    const url = `http://localhost:8082/api/group`
     try {
         const res = await fetch(url, revalidateOptions)
         if (!res.ok) return []
@@ -45,4 +45,18 @@ async function createGroup(name: string): Promise<void> {
     }
 }
 
-export {getGroups, getGroupByName, createGroup}
+/**
+ * @throws ServerSideException
+ * @param name
+ */
+async function deleteGroup(name: string): Promise<void> {
+    const logger: Logger = createLogger("deleteGroup")
+    const url = `http://localhost:8082/api/group?name=${encodeURIComponent(name)}`
+    const res: Response = await fetch(url, { method: "DELETE" })
+    if (!res.ok) {
+        logger.warn("received non-200 response")
+        throw new ServerSideException("unable to delete group")
+    }
+}
+
+export {getGroups, getGroupByName, createGroup, deleteGroup}

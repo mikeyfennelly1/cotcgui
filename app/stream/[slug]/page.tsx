@@ -4,9 +4,9 @@ import {Group} from "@/lib/types/Group";
 import {getGroupByName} from "@/lib/client/group/group";
 import {ProducerCountCard} from "@/components/producer-count-card";
 import {producerListToNameSet} from "@/lib/translate/Translators";
-import {Button} from "@/components/ui/button";
 import React from "react";
 import {Separator} from "radix-ui";
+import {DeleteGroupButton} from "@/components/app-sidebar/DeleteGroupButton";
 
 const logger: Logger = createLogger("GroupPage")
 
@@ -21,7 +21,7 @@ function NoProducersView({group}: { group: Group }): React.JSX.Element {
 function GroupBanner(groupName: string, group: Group) {
     return <div className={"grid grid-cols-2"}>
         <ProducerCountCard groupName={groupName} producers={producerListToNameSet(group.producers)}/>
-        <Button variant={"destructive"} className={"ml-auto"}>Delete Group</Button>
+        <DeleteGroupButton groupName={groupName}/>
     </div>;
 }
 
