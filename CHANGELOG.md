@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - remove use strict directive, add getGroupByName import, type groups
 
 ### Added
+- add confirmation dialog and Ctrl+D shortcut to delete group
 - add search filter and styled scrollbar to EnabledProducersList
 - render producer cards grid in ProducerView
 - add double-Shift command palette for searching groups and pages
