@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+- add logging to CreateGroupSheet and createGroup integration test
 - add docker build script and git hooks
 
 ### Changed

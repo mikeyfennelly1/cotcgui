@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest"
-import { getGroupByName } from "./group"
+import { getGroupByName, createGroup } from "./group"
 import { ServerSideException } from "@/lib/client/exception/ServerSideException"
 import { ClientSideException } from "@/lib/client/exception/ClientSideException"
 
@@ -26,5 +26,11 @@ describe("getGroupByName", () => {
         await expect(getGroupByName(groupName)).rejects.toSatisfy(
             (e: unknown) => e instanceof ServerSideException
         )
+    })
+})
+
+describe("createGroup", () => {
+    it("resolves without throwing on successful creation", async () => {
+        await expect(createGroup("test-group-vitest2")).resolves.toBeUndefined()
     })
 })

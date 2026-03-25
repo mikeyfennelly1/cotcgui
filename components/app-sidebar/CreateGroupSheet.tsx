@@ -13,6 +13,9 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { createGroup } from "@/lib/client/group/group"
+import createLogger from "@/lib/logger"
+
+const logger = createLogger("CreateGroupSheet")
 
 export function CreateGroupSheet() {
     const router = useRouter()
@@ -26,12 +29,15 @@ export function CreateGroupSheet() {
         if (!name.trim()) return
         setLoading(true)
         setError(null)
+        logger.info(`attempting to create group: name="${name.trim()}"`)
         try {
             await createGroup(name.trim())
+            logger.info(`successfully created group: name="${name.trim()}"`)
             setName("")
             setOpen(false)
             router.refresh()
-        } catch {
+        } catch (err) {
+            logger.error(`failed to create group: name="${name.trim()}" error=${err}`)
             setError("Failed to create group. Please try again.")
         } finally {
             setLoading(false)
