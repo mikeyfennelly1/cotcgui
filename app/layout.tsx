@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar/AppSidebar";
 import { TopBanner } from "@/components/top-banner";
+import { CommandSearch } from "@/components/CommandSearch";
 import { Toaster } from "sonner";
 import React from "react";
 
@@ -34,6 +35,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Toaster />
+        <CommandSearch />
         <TooltipProvider>
             <SidebarProvider>
               <aside>

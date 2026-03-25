@@ -1,7 +1,8 @@
 "use server"
 
 import { revalidateTag } from "next/cache"
-import { createGroup, deleteGroup } from "@/lib/client/group/group"
+import { createGroup, deleteGroup, getGroups } from "@/lib/client/group/group"
+import { Group } from "@/lib/types/Group"
 
 type ActionResult = { success: true } | { success: false; error: string }
 
@@ -25,4 +26,12 @@ async function deleteGroupAction(name: string): Promise<ActionResult> {
     }
 }
 
-export { createGroupAction, deleteGroupAction }
+async function getGroupsAction(): Promise<Group[]> {
+    try {
+        return await getGroups()
+    } catch {
+        return []
+    }
+}
+
+export { createGroupAction, deleteGroupAction, getGroupsAction }
