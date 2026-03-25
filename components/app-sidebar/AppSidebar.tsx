@@ -1,5 +1,3 @@
-"use strict";
-
 import {
   Sidebar,
   SidebarContent,
@@ -15,7 +13,7 @@ import { LayoutDashboard } from "lucide-react"
 import createLogger from "@/lib/logger"
 import {NavItemNode} from "@/components/app-sidebar/NavItemNode";
 import {Group} from "@/lib/types/Group";
-import {getGroups} from "@/lib/client/group/group";
+import {getGroupByName, getGroups} from "@/lib/client/group/group";
 import {CreateGroupSheet} from "@/components/app-sidebar/CreateGroupSheet";
 
 const logger = createLogger("AppSidebar")
@@ -35,7 +33,7 @@ function groupToNavItem(stream: Group): NavItem {
 }
 
 export async function AppSidebar() {
-  const groups = await getGroups()
+  const groups: Group[] = await getGroups()
   logger.info(`Fetched ${groups.length} groups`)
 
   const navItems: NavItem[] = groups.map(groupToNavItem)

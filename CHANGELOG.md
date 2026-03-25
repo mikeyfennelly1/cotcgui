@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+- remove use strict directive, add getGroupByName import, type groups
+
 ### Added
 - add delete group toast, sidebar refresh, and fix exception classes
 - implement delete group functionality
