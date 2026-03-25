@@ -11,6 +11,9 @@ RUN npm ci
 # Copy all source files
 COPY . .
 
+# Required at build time for next.config.ts rewrites
+ENV NEXT_PUBLIC_API_BASE_URL="http://200.69.13.70:5030"
+
 # Build the Next.js app
 RUN npm run build
 
@@ -30,6 +33,7 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
 # Set env for production
+ENV NEXT_PUBLIC_API_BASE_URL="http://200.69.13.70:5030"
 ENV NODE_ENV=production
 ENV PORT=8080
 

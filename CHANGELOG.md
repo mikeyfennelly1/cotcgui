@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Fixed
+- set NEXT_PUBLIC_API_BASE_URL at build and runtime stages
 - import TimeSeriesRecord from correct path
 - remove redundant router.refresh() after group deletion
 - remove use strict directive, add getGroupByName import, type groups
