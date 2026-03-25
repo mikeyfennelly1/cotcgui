@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - add docker build script and git hooks
 
 ### Changed
+- split group page into per-component files under stream/[slug]/
 - split stream-view into per-component files under stream-view/
 - extract EnabledProducersList component and clean up imports
 - revalidate groups cache tag on group creation
