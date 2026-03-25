@@ -21,7 +21,6 @@ export function DeleteGroupButton({ groupName }: { groupName: string }) {
             logger.info(`successfully deleted group: name="${groupName}"`)
             toast.success(`Group ${groupName} deleted`)
             router.push("/")
-            router.refresh()
         } else {
             logger.error(`failed to delete group: name="${groupName}" error=${result.error}`)
         }
