@@ -7,9 +7,12 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { LayoutDashboard } from "lucide-react"
+import { Activity, LayoutDashboard } from "lucide-react"
+import Link from "next/link"
 import createLogger from "@/lib/logger"
 import {NavItemNode} from "@/components/app-sidebar/NavItemNode";
 import {Group} from "@/lib/types/Group";
@@ -49,6 +52,21 @@ export async function AppSidebar() {
         </div>
       </SidebarHeader>
       <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Infrastructure</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="NATS">
+                  <Link href="/nats">
+                    <Activity />
+                    <span>NATS</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Groups</SidebarGroupLabel>
           <SidebarGroupContent>

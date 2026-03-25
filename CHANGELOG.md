@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - remove use strict directive, add getGroupByName import, type groups
 
 ### Added
+- add NATS health page at /nats
 - add delete group toast, sidebar refresh, and fix exception classes
 - implement delete group functionality
 - add separators and extract sub-components in GroupPage
