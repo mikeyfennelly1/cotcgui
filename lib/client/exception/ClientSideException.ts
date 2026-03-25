@@ -1,9 +1,8 @@
-class ClientSideException implements Error {
-    message: string;
-    name: string = "ClientSideException";
+class ClientSideException extends Error {
+    override name: string = "ClientSideException";
 
-    constructor(message: string,) {
-        this.message = message;
+    constructor(message: string) {
+        super(message);
     }
 }
 

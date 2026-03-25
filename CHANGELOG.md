@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+- add delete group toast, sidebar refresh, and fix exception classes
 - implement delete group functionality
 - add separators and extract sub-components in GroupPage
 - add logging to CreateGroupSheet and createGroup integration test

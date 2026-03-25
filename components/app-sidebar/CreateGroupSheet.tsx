@@ -49,7 +49,7 @@ export function CreateGroupSheet() {
             <Button
                 variant="outline"
                 size="sm"
-                className="w-full justify-start gap-2"
+                className="my-20 py-5 shadow-xl w-full justify-start gap-2"
                 onClick={() => setOpen(true)}
             >
                 <Plus className="h-4 w-4" />

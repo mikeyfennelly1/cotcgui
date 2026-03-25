@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar/AppSidebar";
 import { TopBanner } from "@/components/top-banner";
+import { Toaster } from "sonner";
 import React from "react";
 
 const geistSans = Geist({
@@ -32,16 +33,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Toaster />
         <TooltipProvider>
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset>
-              <TopBanner />
-              <main className="flex-1 overflow-auto p-6 bg-slate-50/50 dark:bg-transparent">
-                {children}
-              </main>
-            </SidebarInset>
-          </SidebarProvider>
+            <SidebarProvider>
+              <aside>
+                <AppSidebar />
+              </aside>
+              <SidebarInset>
+                <TopBanner />
+                <main className="flex-1 overflow-auto p-6 bg-slate-50/50 dark:bg-transparent">
+                  {children}
+                </main>
+              </SidebarInset>
+            </SidebarProvider>
         </TooltipProvider>
       </body>
     </html>

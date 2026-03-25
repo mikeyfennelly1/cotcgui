@@ -2,8 +2,9 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
-import { deleteGroup } from "@/lib/client/group/group"
+import { deleteGroupAction } from "@/lib/actions/group"
 import createLogger from "@/lib/logger"
 
 const logger = createLogger("DeleteGroupButton")
@@ -15,15 +16,16 @@ export function DeleteGroupButton({ groupName }: { groupName: string }) {
     async function handleDelete() {
         setLoading(true)
         logger.info(`attempting to delete group: name="${groupName}"`)
-        try {
-            await deleteGroup(groupName)
+        const result = await deleteGroupAction(groupName)
+        if (result.success) {
             logger.info(`successfully deleted group: name="${groupName}"`)
+            toast.success(`Group ${groupName} deleted`)
             router.push("/")
-        } catch (err) {
-            logger.error(`failed to delete group: name="${groupName}" error=${err}`)
-        } finally {
-            setLoading(false)
+            router.refresh()
+        } else {
+            logger.error(`failed to delete group: name="${groupName}" error=${result.error}`)
         }
+        setLoading(false)
     }
 
     return (
