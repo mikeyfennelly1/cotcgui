@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { createGroup } from "@/lib/client/group/group"
+import { createGroupAction } from "@/lib/actions/group"
 import createLogger from "@/lib/logger"
 
 const logger = createLogger("CreateGroupSheet")
@@ -31,7 +31,8 @@ export function CreateGroupSheet() {
         setError(null)
         logger.info(`attempting to create group: name="${name.trim()}"`)
         try {
-            await createGroup(name.trim())
+            const result = await createGroupAction(name.trim())
+            if (!result.success) throw new Error(result.error)
             logger.info(`successfully created group: name="${name.trim()}"`)
             setName("")
             setOpen(false)
