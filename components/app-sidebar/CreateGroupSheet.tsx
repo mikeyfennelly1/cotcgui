@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Plus } from "lucide-react"
 import {
@@ -11,6 +11,11 @@ import {
     SheetTitle,
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { Input } from "@/components/ui/input"
 import { createGroupAction } from "@/lib/actions/group"
 import createLogger from "@/lib/logger"
@@ -23,6 +28,17 @@ export function CreateGroupSheet() {
     const [name, setName] = useState("")
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "g" && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault()
+                setOpen(true)
+            }
+        }
+        window.addEventListener("keydown", handleKeyDown)
+        return () => window.removeEventListener("keydown", handleKeyDown)
+    }, [])
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
@@ -47,15 +63,22 @@ export function CreateGroupSheet() {
 
     return (
         <>
-            <Button
-                variant="outline"
-                size="sm"
-                className="my-20 py-5 shadow-xl w-full justify-start gap-2"
-                onClick={() => setOpen(true)}
-            >
-                <Plus className="h-4 w-4" />
-                New Group
-            </Button>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="my-20 py-5 shadow-xl w-full justify-start gap-2"
+                        onClick={() => setOpen(true)}
+                    >
+                        <Plus className="h-4 w-4" />
+                        New Group
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                    Create a new group <kbd className="ml-1 rounded bg-muted px-1.5 py-0.5 text-xs font-mono text-black">Ctrl+G</kbd>
+                </TooltipContent>
+            </Tooltip>
 
             <Sheet open={open} onOpenChange={setOpen}>
                 <SheetContent side="left">
