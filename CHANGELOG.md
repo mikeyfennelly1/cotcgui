@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - add docker build script and git hooks
 
 ### Changed
+- docker build script uses VERSION to push
 - user image
 - use revalidateTag instead of revalidatePath to prevent GroupPage re-render
 - add cursor pointer to DeleteGroupButton

@@ -21,10 +21,12 @@ source "${ENVFILE}"
 var_must_exist NEXT_PUBLIC_API_BASE_URL
 
 export NEXT_PUBLIC_API_BASE_URL
-IMAGE_NAME="mikeyfennelly/cotcgui:latest"
-docker build -t "${IMAGE_NAME}" .
+VERSION=$(cat VERSION | tr -d '[:space:]')
+IMAGE_NAME="mikeyfennelly/cotcgui:${VERSION}"
+docker build -t "${IMAGE_NAME}" -t "mikeyfennelly/cotcgui:latest" .
 
 docker login
 docker push "${IMAGE_NAME}"
+docker push "mikeyfennelly/cotcgui:latest"
 
 popd
